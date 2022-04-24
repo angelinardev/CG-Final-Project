@@ -8,6 +8,7 @@
 #include "Gameplay/Components/ComponentManager.h"
 #include "Gameplay/Components/RenderComponent.h"
 #include "Gameplay/Components/Light.h"
+#include "Gameplay/InputEngine.h"
 
 // GLM math library
 #include <GLM/glm.hpp>
@@ -24,14 +25,14 @@ RenderLayer::RenderLayer() :
 	_blitFbo(true),
 	_frameUniforms(nullptr),
 	_instanceUniforms(nullptr),
-	_renderFlags(RenderFlags::None),
+	_renderFlags(RenderFlags::EnableAmbient|RenderFlags::EnableDiffuse|RenderFlags::EnableSpecular),
 	_clearColor({ 0.1f, 0.1f, 0.1f, 1.0f })
 {
 	Name = "Rendering";
 	Overrides = 
 		AppLayerFunctions::OnAppLoad | 
 		AppLayerFunctions::OnPreRender | AppLayerFunctions::OnRender | AppLayerFunctions::OnPostRender | 
-		AppLayerFunctions::OnWindowResize;
+		AppLayerFunctions::OnWindowResize | AppLayerFunctions::OnUpdate;
 }
 
 RenderLayer::~RenderLayer() = default;
@@ -616,4 +617,48 @@ const UniformBuffer<RenderLayer::FrameLevelUniforms>::Sptr& RenderLayer::GetFram
 {
 	return _frameUniforms;
 }
+void RenderLayer::OnUpdate()
+{
+	using namespace Gameplay;
+	Application& app = Application::Get();
 
+	Scene::Sptr& scene = app.CurrentScene();
+
+	if (InputEngine::GetKeyState(GLFW_KEY_3) == ButtonState::Pressed)//enable/disable specular
+	{
+		enable_specular = !enable_specular;
+	}
+	if (InputEngine::GetKeyState(GLFW_KEY_2) == ButtonState::Pressed)//ambient light only
+	{
+		enable_ambient = !enable_ambient;
+	}
+	if (InputEngine::GetKeyState(GLFW_KEY_1) == ButtonState::Pressed)
+	{
+		enable_diffuse = !enable_diffuse;
+	}
+	if (enable_ambient)
+	{
+		scene->SetAmbientLight(glm::vec3(0.2f));
+	}
+	else
+	{
+		scene->SetAmbientLight(glm::vec3(0.0f));
+	}
+	if (enable_specular && enable_diffuse)
+	{
+		_renderFlags = RenderFlags::EnableSpecular | RenderFlags::EnableDiffuse;
+	}
+	else if (enable_specular)
+	{
+		_renderFlags = RenderFlags::EnableSpecular;
+	}
+	else if (enable_diffuse)
+	{
+
+		_renderFlags = RenderFlags::EnableDiffuse;
+	}
+	else
+	{
+		_renderFlags = RenderFlags::None;
+	}
+}
