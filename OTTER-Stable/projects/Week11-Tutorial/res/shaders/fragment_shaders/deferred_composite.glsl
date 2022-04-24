@@ -19,8 +19,8 @@ void main() {
     vec3 specular = texture(s_SpecularAccumulation, inUV).rgb;
     vec4 emissive = texture(s_Emissive, inUV);
 
-     specular = SpecularCorrect(texture(s_SpecularAccumulation, inUV).rgb);
-     diffuse = DiffuseCorrect(texture(s_DiffuseAccumulation, inUV).rgb);
+     specular = SpecularCorrect(specular);
+     diffuse = DiffuseCorrect(diffuse);
 
 
 	outColor = vec4(albedo * (diffuse + specular + (emissive.rgb * emissive.a)), 1.0);

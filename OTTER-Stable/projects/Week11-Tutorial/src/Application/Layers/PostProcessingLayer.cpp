@@ -11,6 +11,7 @@
 #include "PostProcessing/NightVision.h"
 #include "PostProcessing/SlimeVignette.h"
 #include "PostProcessing/ToonEffect.h"
+#include "PostProcessing/InvertEffect.h"
 
 PostProcessingLayer::PostProcessingLayer() :
 	ApplicationLayer()
@@ -38,8 +39,10 @@ void PostProcessingLayer::OnAppLoad(const nlohmann::json& config)
 	//_effects.push_back(std::make_shared<OutlineEffect>());
 	//_effects.push_back(std::make_shared<DepthOfField>());
 	_effects.push_back(std::make_shared<ToonEffect>());
+	_effects.push_back(std::make_shared<InvertEffect>());
 	
 	//GetEffect<OutlineEffect>()->Enabled = false;
+	GetEffect<InvertEffect>()->Enabled = false;
 
 	Application& app = Application::Get();
 	const glm::uvec4& viewport = app.GetPrimaryViewport();

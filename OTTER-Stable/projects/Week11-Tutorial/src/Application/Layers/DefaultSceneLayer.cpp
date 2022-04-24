@@ -332,7 +332,7 @@ void DefaultSceneLayer::_CreateScene()
 		GameObject::Sptr lightParent = scene->CreateGameObject("Lights");
 		{
 			Gameplay::GameObject::Sptr light = scene->CreateGameObject("Light");
-			light->SetPostion(glm::vec3(-0.36f, 0.97f, 3.36f));
+			light->SetPostion(glm::vec3(-9.82f, 0.97f, 3.36f));
 			lightParent->AddChild(light);
 
 			Light::Sptr lightComponent = light->Add<Light>();
@@ -436,17 +436,49 @@ void DefaultSceneLayer::_CreateScene()
 
 			demoBase->AddChild(specBox);
 		}
+		//player character
+		{
+			////add particles to trashy
+			//Gameplay::GameObject::Sptr particles = scene->CreateGameObject("Particles");
+			//trashyM->AddChild(particles);
+			//particles->SetPostion({ 0.0f, 0.0f, 0.24f });
+
+			//ParticleSystem::Sptr particleManager = particles->Add<ParticleSystem>();
+			//particleManager->Atlas = particleTex;
+
+			//particleManager->_gravity = glm::vec3(0.0f);
+
+			//ParticleSystem::ParticleData emitter;
+			//emitter.Type = ParticleType::SphereEmitter;
+			//emitter.TexID = 2;
+			//emitter.Position = glm::vec3(0.0f);
+			//emitter.Color = glm::vec4(0.966f, 0.878f, 0.767f, 1.0f);
+			//emitter.Lifetime = 1.0f / 50.0f;
+			//emitter.SphereEmitterData.Timer = 1.0f / 10.0f;
+			//emitter.SphereEmitterData.Velocity = 0.5f;
+			//emitter.SphereEmitterData.LifeRange = { 1.0f, 1.5f };
+			//emitter.SphereEmitterData.Radius = 0.5f;
+			//emitter.SphereEmitterData.SizeRange = { 0.25f, 0.5f };
+
+
+			//particleManager->AddEmitter(emitter);
+		}
 
 		Gameplay::GameObject::Sptr shadowCaster = scene->CreateGameObject("Shadow Light");
 		{
 			// Set position in the scene
-			shadowCaster->SetPostion(glm::vec3(0.0f, 4.84f, 7.24f));
-			//shadowCaster->LookAt(glm::vec3(0.0f));
-			shadowCaster->SetRotation(glm::vec3(-89.0f, 0.0f, 0.0f));
+			//shadowCaster->SetPostion(glm::vec3(0.0f, 4.84f, 7.24f));
+			shadowCaster->SetPostion(glm::vec3(-0.51f, -0.8f, 3.67f));
+			shadowCaster->LookAt(glm::vec3(0.0f));
+			//shadowCaster->SetRotation(glm::vec3(-11.685f, -12.0f, 74.0f));
+			//shadowCaster->SetScale(glm::vec3(1.67f, 1.44f, 1.26f));
 
 			// Create and attach a renderer for the monkey
 			ShadowCamera::Sptr shadowCam = shadowCaster->Add<ShadowCamera>();
+			shadowCam->Flags = ShadowFlags::PcfEnabled;
+
 			shadowCam->SetProjection(glm::perspective(glm::radians(120.0f), 1.0f, 0.1f, 100.0f));
+			shadowCam->Intensity = 7.62f;
 		}
 
 		

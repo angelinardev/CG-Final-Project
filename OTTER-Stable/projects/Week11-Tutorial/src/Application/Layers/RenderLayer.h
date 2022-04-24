@@ -120,7 +120,6 @@ public:
 	const UniformBuffer<FrameLevelUniforms>::Sptr& GetFrameUniforms() const;
 
 	// Inherited from ApplicationLayer
-	// Inherited from ApplicationLayer
 	virtual void OnUpdate() override;
 	virtual void OnAppLoad(const nlohmann::json& config) override;
 	virtual void OnPreRender() override;
@@ -129,7 +128,7 @@ public:
 	virtual void OnWindowResize(const glm::ivec2& oldSize, const glm::ivec2& newSize) override;
 
 protected:
-	bool enable_specular = false;
+	bool enable_specular = true;
 	bool enable_ambient = true;
 	bool enable_diffuse = true;
 
