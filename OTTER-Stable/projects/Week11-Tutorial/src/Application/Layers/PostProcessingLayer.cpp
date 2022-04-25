@@ -12,6 +12,8 @@
 #include "PostProcessing/SlimeVignette.h"
 #include "PostProcessing/ToonEffect.h"
 #include "PostProcessing/InvertEffect.h"
+#include "PostProcessing/PixellationEffect.h"
+#include "PostProcessing/ChromaticAberrationEffect.h"
 
 PostProcessingLayer::PostProcessingLayer() :
 	ApplicationLayer()
@@ -41,6 +43,8 @@ void PostProcessingLayer::OnAppLoad(const nlohmann::json& config)
 	_effects.push_back(std::make_shared<ToonEffect>());
 	_effects.push_back(std::make_shared<InvertEffect>());
 	_effects.push_back(std::make_shared<SlimeVignette>());
+	_effects.push_back(std::make_shared<ChromaticAberrationEffect>());
+	_effects.push_back(std::make_shared<PixellationEffect>());
 	_effects.push_back(std::make_shared<NightVision>());
 	
 	//GetEffect<OutlineEffect>()->Enabled = false;
