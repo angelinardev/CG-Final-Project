@@ -74,6 +74,8 @@
 #include "Application/Windows/DebugWindow.h"
 #include "Gameplay/Components/ShadowCamera.h"
 #include "Gameplay/Components/ShipMoveBehaviour.h"
+#include "Gameplay/Components/PlayerMovementBehavior.h"
+
 
 DefaultSceneLayer::DefaultSceneLayer() :
 	ApplicationLayer()
@@ -435,6 +437,53 @@ void DefaultSceneLayer::_CreateScene()
 			renderer->SetMaterial(testMaterial); 
 
 			demoBase->AddChild(specBox);
+			// Add a dynamic rigid body to this monkey
+			Gameplay::Physics::RigidBody::Sptr physics = specBox->Add<Gameplay::Physics::RigidBody>(RigidBodyType::Dynamic);
+			Gameplay::Physics::BoxCollider::Sptr box = Gameplay::Physics::BoxCollider::Create();
+
+			//box->SetPosition(glm::vec3(0.02f, 0.5f, 0.0f));
+			//box->SetScale(glm::vec3(0.33f, 0.580f, 0.22f));
+			//box->SetExtents(glm::vec3(0.8, 2.68, 0.83));
+			physics->AddCollider(box);
+			//physics->AddCollider(BoxCollider::Create());
+			//physics->SetMass(0.0f);
+			//add trigger for collisions and behaviours
+			Gameplay::Physics::TriggerVolume::Sptr volume = specBox->Add<Gameplay::Physics::TriggerVolume>();
+			Gameplay::Physics::BoxCollider::Sptr box2 = Gameplay::Physics::BoxCollider::Create();
+
+			//box2->SetPosition(glm::vec3(0.02f, 0.5f, 0.0f));
+			//box2->SetScale(glm::vec3(0.33f, 0.58f, 0.22f));
+			//box2->SetExtents(glm::vec3(0.8, 2.68, 0.83));
+			volume->AddCollider(box2);
+
+			specBox->Get<Gameplay::Physics::RigidBody>()->SetAngularFactor(glm::vec3(0.0f, 0.0f, 0.0f));
+			specBox->Get<Gameplay::Physics::RigidBody>()->SetLinearDamping(0.9f);
+			specBox->Add<PlayerMovementBehavior>();
+			//add particles to trashy
+			Gameplay::GameObject::Sptr particles = scene->CreateGameObject("Particles");
+			specBox->AddChild(particles);
+			particles->SetPostion({ 0.0f, 0.0f, 0.24f });
+
+			ParticleSystem::Sptr particleManager = particles->Add<ParticleSystem>();
+			particleManager->Atlas = particleTex;
+
+			particleManager->_gravity = glm::vec3(0.0f);
+
+			ParticleSystem::ParticleData emitter;
+			emitter.Type = ParticleType::SphereEmitter;
+			emitter.TexID = 2;
+			emitter.Position = glm::vec3(0.0f);
+			emitter.Color = glm::vec4(0.966f, 0.878f, 0.767f, 1.0f);
+			emitter.Lifetime = 1.0f / 50.0f;
+			emitter.SphereEmitterData.Timer = 1.0f / 10.0f;
+			emitter.SphereEmitterData.Velocity = 0.5f;
+			emitter.SphereEmitterData.LifeRange = { 1.0f, 1.5f };
+			emitter.SphereEmitterData.Radius = 0.5f;
+			emitter.SphereEmitterData.SizeRange = { 0.25f, 0.5f };
+
+
+			particleManager->AddEmitter(emitter);
+
 		}
 		//player character
 		{
