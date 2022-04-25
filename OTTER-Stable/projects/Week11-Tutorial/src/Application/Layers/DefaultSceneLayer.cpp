@@ -537,33 +537,7 @@ void DefaultSceneLayer::_CreateScene()
 			particleManager->AddEmitter(emitter);
 
 		}
-		//player character
-		{
-			////add particles to trashy
-			//Gameplay::GameObject::Sptr particles = scene->CreateGameObject("Particles");
-			//trashyM->AddChild(particles);
-			//particles->SetPostion({ 0.0f, 0.0f, 0.24f });
-
-			//ParticleSystem::Sptr particleManager = particles->Add<ParticleSystem>();
-			//particleManager->Atlas = particleTex;
-
-			//particleManager->_gravity = glm::vec3(0.0f);
-
-			//ParticleSystem::ParticleData emitter;
-			//emitter.Type = ParticleType::SphereEmitter;
-			//emitter.TexID = 2;
-			//emitter.Position = glm::vec3(0.0f);
-			//emitter.Color = glm::vec4(0.966f, 0.878f, 0.767f, 1.0f);
-			//emitter.Lifetime = 1.0f / 50.0f;
-			//emitter.SphereEmitterData.Timer = 1.0f / 10.0f;
-			//emitter.SphereEmitterData.Velocity = 0.5f;
-			//emitter.SphereEmitterData.LifeRange = { 1.0f, 1.5f };
-			//emitter.SphereEmitterData.Radius = 0.5f;
-			//emitter.SphereEmitterData.SizeRange = { 0.25f, 0.5f };
-
-
-			//particleManager->AddEmitter(emitter);
-		}
+		
 
 		Gameplay::GameObject::Sptr shadowCaster = scene->CreateGameObject("Shadow Light");
 		{

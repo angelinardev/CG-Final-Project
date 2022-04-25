@@ -82,7 +82,7 @@ void main() {
     }
 
     diffuse = DiffuseCorrect(diffuse);
-    specular = SpecularCorrect(specular);
+    //specular = SpecularCorrect(specular);
 
     outDiffuse = vec4(diffuse, 1);
     outSpecular = vec4(specular, 1);

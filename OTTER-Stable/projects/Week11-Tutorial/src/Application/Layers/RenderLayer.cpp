@@ -645,7 +645,7 @@ void RenderLayer::OnUpdate()
 		scene->SetAmbientLight(glm::vec3(0.0f));
 	}
 
-
+	
 	if (enable_specular && enable_diffuse)
 	{
 		_renderFlags = RenderFlags::EnableSpecular | RenderFlags::EnableDiffuse;
