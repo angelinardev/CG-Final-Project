@@ -48,6 +48,7 @@
 #include "Gameplay/Components/ShipMoveBehaviour.h"
 #include "Gameplay/Components/PlayerMovementBehavior.h"
 #include "Gameplay/Components/SeekBehaviour.h"
+#include "Gameplay/Components/ProjectileBehaviour.h"
 
 // GUI
 #include "Gameplay/Components/GUI/RectTransform.h"
@@ -283,6 +284,7 @@ void Application::_RegisterClasses()
 	ComponentManager::RegisterType<ShipMoveBehaviour>();
 	ComponentManager::RegisterType<PlayerMovementBehavior>();
 	ComponentManager::RegisterType<SeekBehaviour>();
+	ComponentManager::RegisterType<ProjectileBehaviour>();
 }
 
 void Application::_Load() {

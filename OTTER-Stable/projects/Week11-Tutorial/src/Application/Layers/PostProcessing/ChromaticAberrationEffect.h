@@ -19,9 +19,9 @@ public:
 
 	ChromaticAberrationEffect::Sptr FromJson(const nlohmann::json& data);
 	virtual nlohmann::json ToJson() const override;
-
+	float _strength;
 protected:
 	ShaderProgram::Sptr _shader;
-	float _strength;
+
 };
 

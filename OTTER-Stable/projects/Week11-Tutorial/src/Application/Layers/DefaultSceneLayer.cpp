@@ -50,6 +50,7 @@
 #include "Gameplay/Components/TriggerVolumeEnterBehaviour.h"
 #include "Gameplay/Components/SimpleCameraControl.h"
 #include "Gameplay/Components/SeekBehaviour.h"
+#include "Gameplay/Components/ProjectileBehaviour.h"
 
 // Physics
 #include "Gameplay/Physics/RigidBody.h"
@@ -154,6 +155,8 @@ void DefaultSceneLayer::_CreateScene()
 		Texture2D::Sptr    monkeyTex    = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    leafTex      = ResourceManager::CreateAsset<Texture2D>("textures/leaves.png");
 		Texture2D::Sptr    EyeballTex = ResourceManager::CreateAsset<Texture2D>("textures/EyeballTex.png");
+		Texture2D::Sptr    EyeballEmissiveTex = ResourceManager::CreateAsset<Texture2D>("textures/EyeballEmissive.png");
+
 		leafTex->SetMinFilter(MinFilter::Nearest);
 		leafTex->SetMagFilter(MagFilter::Nearest);
 
@@ -249,6 +252,7 @@ void DefaultSceneLayer::_CreateScene()
 			eyeMaterial->Name = "Eyeball";
 			eyeMaterial->Set("u_Material.AlbedoMap", EyeballTex);
 			eyeMaterial->Set("u_Material.Specular", boxSpec);
+			eyeMaterial->Set("u_Material.EmissiveMap", EyeballEmissiveTex);
 			eyeMaterial->Set("u_Material.NormalMap", normalMapDefault);
 		}
 
@@ -498,7 +502,11 @@ void DefaultSceneLayer::_CreateScene()
 		{
 
 			SeekBehaviour::Sptr seek= Enemy->Add<SeekBehaviour>();
-			seek->seekTo(specBox);
+			seek->IsEnabled = true;
+
+			ProjectileBehaviour::Sptr ProjectileSpawner = Enemy->Add<ProjectileBehaviour>();
+			ProjectileSpawner->PassMaterial(grey);
+			
 
 			// Set and rotation position in the scene
 			Enemy->SetPostion(glm::vec3(-7.588, 0.1f, 1.01f));
@@ -511,7 +519,7 @@ void DefaultSceneLayer::_CreateScene()
 			renderer->SetMaterial(eyeMaterial);
 
 			// Add a dynamic rigid body to this monkey
-			Gameplay::Physics::RigidBody::Sptr physics = Enemy->Add<Gameplay::Physics::RigidBody>(RigidBodyType::Dynamic);
+			Gameplay::Physics::RigidBody::Sptr physics = Enemy->Add<Gameplay::Physics::RigidBody>(RigidBodyType::Static);
 			Gameplay::Physics::SphereCollider::Sptr Sphere = Gameplay::Physics::SphereCollider::Create();
 			Sphere->SetRadius(Sphere->GetRadius() / 2);
 
@@ -555,8 +563,8 @@ void DefaultSceneLayer::_CreateScene()
 		{
 			// Set position in the scene
 			//shadowCaster->SetPostion(glm::vec3(0.0f, 4.84f, 7.24f));
-			shadowCaster->SetPostion(glm::vec3(-0.51f, -0.8f, 3.67f));
-			shadowCaster->LookAt(glm::vec3(0.0f));
+			shadowCaster->SetPostion(glm::vec3(0));
+			//shadowCaster->LookAt(glm::vec3(0.0f));
 			//shadowCaster->SetRotation(glm::vec3(-11.685f, -12.0f, 74.0f));
 			//shadowCaster->SetScale(glm::vec3(1.67f, 1.44f, 1.26f));
 
@@ -566,6 +574,8 @@ void DefaultSceneLayer::_CreateScene()
 
 			shadowCam->SetProjection(glm::perspective(glm::radians(120.0f), 1.0f, 0.1f, 100.0f));
 			shadowCam->Intensity = 7.62f;
+			shadowCam->Bias *= 7;
+			Enemy->AddChild(shadowCaster);
 		}
 
 		

@@ -104,6 +104,7 @@ void PlayerMovementBehavior::Update(float deltaTime) {
 	is_moving = false;
 	if (glfwGetKey(app.GetWindow(), GLFW_KEY_W) || glfwGetKey(app.GetWindow(), GLFW_KEY_UP)) {
 		if (_body->GetLinearVelocity().y >= -5.0f) {
+			GetGameObject()->SetRotation(glm::vec3(90, 0, 0));
 			
 			_body->ApplyImpulse(glm::vec3(0.0f, -_impulse, 0.0f));
 			//GetGameObject()->SetRotation(glm::vec3(90.0f, 0.0f, 0.0f));
@@ -120,7 +121,7 @@ void PlayerMovementBehavior::Update(float deltaTime) {
 	if (glfwGetKey(app.GetWindow(), GLFW_KEY_S) || glfwGetKey(app.GetWindow(), GLFW_KEY_DOWN)) {
 		if (_body->GetLinearVelocity().y <= 5.0f) {
 			_body->ApplyImpulse(glm::vec3(0.0f, _impulse, 0.0f));
-			
+			GetGameObject()->SetRotation(glm::vec3(90, 0, -180));
 		
 			
 			//GetGameObject()->SetRotation(glm::vec3(90.0f, 0.0f, 180.0f));
@@ -137,7 +138,7 @@ void PlayerMovementBehavior::Update(float deltaTime) {
 	if (glfwGetKey(app.GetWindow(), GLFW_KEY_A) || glfwGetKey(app.GetWindow(), GLFW_KEY_LEFT)) {
 		if (_body->GetLinearVelocity().x <= 5.0f) {
 			_body->ApplyImpulse(glm::vec3(_impulse, 0.0f, 0.0f));
-
+			GetGameObject()->SetRotation(glm::vec3(90, 0, -270));
 			
 
 			//GetGameObject()->SetRotation(glm::vec3(90.0f, 0.0f, 90.0f));
@@ -154,6 +155,7 @@ void PlayerMovementBehavior::Update(float deltaTime) {
 	if (glfwGetKey(app.GetWindow(), GLFW_KEY_D) || glfwGetKey(app.GetWindow(), GLFW_KEY_RIGHT)) {
 		if (_body->GetLinearVelocity().x >= -5.0f) {
 			_body->ApplyImpulse(glm::vec3(-_impulse, 0.0f, 0.0f));
+			GetGameObject()->SetRotation(glm::vec3(90,0,-90));
 			
 
 			
