@@ -20,11 +20,11 @@ void PlayerHealth::OnTriggerVolumeEntered(const std::shared_ptr<Gameplay::Physic
 {
 	if (body->GetGameObject()->Name == "Player" && !dead) //this trigger has entered to the player
 	{
-		if (!body->GetGameObject()->Get<JumpBehaviour>()->in_air)//not jumping
-		{
-			is_attacking = true;
-			body2 = body;
-		} 
+		//if (!body->GetGameObject()->Get<JumpBehaviour>()->in_air)//not jumping
+		//{
+		//	is_attacking = true;
+		//	body2 = body;
+		//} 
 	}
 }
 

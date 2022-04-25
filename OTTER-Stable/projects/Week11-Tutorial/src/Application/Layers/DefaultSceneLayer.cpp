@@ -49,6 +49,7 @@
 #include "Gameplay/Components/MaterialSwapBehaviour.h"
 #include "Gameplay/Components/TriggerVolumeEnterBehaviour.h"
 #include "Gameplay/Components/SimpleCameraControl.h"
+#include "Gameplay/Components/SeekBehaviour.h"
 
 // Physics
 #include "Gameplay/Physics/RigidBody.h"
@@ -141,13 +142,15 @@ void DefaultSceneLayer::_CreateScene()
 
 		// Load in the meshes
 		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
-		MeshResource::Sptr shipMesh   = ResourceManager::CreateAsset<MeshResource>("fenrir.obj");
+		MeshResource::Sptr EyeballMesh = ResourceManager::CreateAsset<MeshResource>("Eyeball.obj");
+		//MeshResource::Sptr shipMesh   = ResourceManager::CreateAsset<MeshResource>("fenrir.obj");
 
 		// Load in some textures
 		Texture2D::Sptr    boxTexture   = ResourceManager::CreateAsset<Texture2D>("textures/box-diffuse.png");
 		Texture2D::Sptr    boxSpec      = ResourceManager::CreateAsset<Texture2D>("textures/box-specular.png");
 		Texture2D::Sptr    monkeyTex    = ResourceManager::CreateAsset<Texture2D>("textures/monkey-uvMap.png");
 		Texture2D::Sptr    leafTex      = ResourceManager::CreateAsset<Texture2D>("textures/leaves.png");
+		Texture2D::Sptr    EyeballTex = ResourceManager::CreateAsset<Texture2D>("textures/EyeballTex.png");
 		leafTex->SetMinFilter(MinFilter::Nearest);
 		leafTex->SetMagFilter(MagFilter::Nearest);
 
@@ -157,6 +160,7 @@ void DefaultSceneLayer::_CreateScene()
 		ResourceManager::CreateAsset<Texture2D>("textures/light_projection.png");
 
 		Texture2DArray::Sptr particleTex = ResourceManager::CreateAsset<Texture2DArray>("textures/particles.png", 2, 2);
+		Texture2DArray::Sptr particleTex2 = ResourceManager::CreateAsset<Texture2DArray>("textures/particles - Copy.png", 2, 2);
 
 		//DebugWindow::Sptr debugWindow = app.GetLayer<ImGuiDebugLayer>()->GetWindow<DebugWindow>();
 
@@ -236,6 +240,13 @@ void DefaultSceneLayer::_CreateScene()
 			testMaterial->Set("u_Material.AlbedoMap", boxTexture); 
 			testMaterial->Set("u_Material.Specular", boxSpec);
 			testMaterial->Set("u_Material.NormalMap", normalMapDefault);
+		}
+		Material::Sptr eyeMaterial = ResourceManager::CreateAsset<Material>(deferredForward);
+		{
+			eyeMaterial->Name = "Eyeball";
+			eyeMaterial->Set("u_Material.AlbedoMap", EyeballTex);
+			eyeMaterial->Set("u_Material.Specular", boxSpec);
+			eyeMaterial->Set("u_Material.NormalMap", normalMapDefault);
 		}
 
 		// Our foliage vertex shader material 
@@ -382,7 +393,7 @@ void DefaultSceneLayer::_CreateScene()
 			camera->SetPostion(glm::vec3(0.0f, 4.0f, 6.f));
 			camera->LookAt(glm::vec3(0.0f, -3.9f, -2.0f));
 
-			camera->Add<SimpleCameraControl>();
+			//camera->Add<SimpleCameraControl>();
 
 			// This is now handled by scene itself!
 			//Camera::Sptr cam = camera->Add<Camera>();
@@ -422,7 +433,7 @@ void DefaultSceneLayer::_CreateScene()
 		GameObject::Sptr demoBase = scene->CreateGameObject("Demo Parent");
 
 		// Box to showcase the specular material
-		GameObject::Sptr specBox = scene->CreateGameObject("Specular Object");
+		GameObject::Sptr specBox = scene->CreateGameObject("Player");
 		{
 			MeshResource::Sptr boxMesh = ResourceManager::CreateAsset<MeshResource>();
 			boxMesh->AddParam(MeshBuilderParam::CreateCube(ZERO, ONE));
@@ -440,21 +451,9 @@ void DefaultSceneLayer::_CreateScene()
 			// Add a dynamic rigid body to this monkey
 			Gameplay::Physics::RigidBody::Sptr physics = specBox->Add<Gameplay::Physics::RigidBody>(RigidBodyType::Dynamic);
 			Gameplay::Physics::BoxCollider::Sptr box = Gameplay::Physics::BoxCollider::Create();
+			box->SetExtents(glm::vec3(0.5));
 
-			//box->SetPosition(glm::vec3(0.02f, 0.5f, 0.0f));
-			//box->SetScale(glm::vec3(0.33f, 0.580f, 0.22f));
-			//box->SetExtents(glm::vec3(0.8, 2.68, 0.83));
 			physics->AddCollider(box);
-			//physics->AddCollider(BoxCollider::Create());
-			//physics->SetMass(0.0f);
-			//add trigger for collisions and behaviours
-			Gameplay::Physics::TriggerVolume::Sptr volume = specBox->Add<Gameplay::Physics::TriggerVolume>();
-			Gameplay::Physics::BoxCollider::Sptr box2 = Gameplay::Physics::BoxCollider::Create();
-
-			//box2->SetPosition(glm::vec3(0.02f, 0.5f, 0.0f));
-			//box2->SetScale(glm::vec3(0.33f, 0.58f, 0.22f));
-			//box2->SetExtents(glm::vec3(0.8, 2.68, 0.83));
-			volume->AddCollider(box2);
 
 			specBox->Get<Gameplay::Physics::RigidBody>()->SetAngularFactor(glm::vec3(0.0f, 0.0f, 0.0f));
 			specBox->Get<Gameplay::Physics::RigidBody>()->SetLinearDamping(0.9f);
@@ -482,6 +481,59 @@ void DefaultSceneLayer::_CreateScene()
 			emitter.SphereEmitterData.SizeRange = { 0.25f, 0.5f };
 
 
+			particleManager->AddEmitter(emitter);
+
+		}
+
+		// Box to showcase the specular material
+		GameObject::Sptr Enemy = scene->CreateGameObject("Enemy");
+		{
+
+			SeekBehaviour::Sptr seek= Enemy->Add<SeekBehaviour>();
+			seek->seekTo(specBox);
+
+			// Set and rotation position in the scene
+			Enemy->SetPostion(glm::vec3(-7.588, 0.1f, 1.01f));
+			Enemy->SetScale(glm::vec3(0.5));
+
+			// Add a render component
+			RenderComponent::Sptr renderer = Enemy->Add<RenderComponent>();
+
+			renderer->SetMesh(EyeballMesh);
+			renderer->SetMaterial(eyeMaterial);
+
+			// Add a dynamic rigid body to this monkey
+			Gameplay::Physics::RigidBody::Sptr physics = Enemy->Add<Gameplay::Physics::RigidBody>(RigidBodyType::Dynamic);
+			Gameplay::Physics::SphereCollider::Sptr Sphere = Gameplay::Physics::SphereCollider::Create();
+			Sphere->SetRadius(Sphere->GetRadius() / 2);
+
+			physics->AddCollider(Sphere);
+
+			Enemy->Get<Gameplay::Physics::RigidBody>()->SetAngularFactor(glm::vec3(0.0f, 0.0f, 0.0f));
+			Enemy->Get<Gameplay::Physics::RigidBody>()->SetLinearDamping(0.9f);
+
+			//this is our enemy so he doesn't need  movement behaviour!
+			//specBox->Add<PlayerMovementBehavior>();
+
+			Gameplay::GameObject::Sptr particles = scene->CreateGameObject("Particles");
+			Enemy->AddChild(particles);
+			particles->SetPostion({ 0.0f, 0.0f, 0.24f });
+
+			ParticleSystem::Sptr particleManager = particles->Add<ParticleSystem>();
+			particleManager->Atlas = particleTex;
+			particleManager->_gravity = glm::vec3(0.0f);
+
+			ParticleSystem::ParticleData emitter;
+			emitter.Type = ParticleType::SphereEmitter;
+			emitter.TexID = 2;
+			emitter.Position = glm::vec3(0.0f);
+			emitter.Color = glm::vec4(0.966f, 0.878f, 0.767f, 1.0f);
+			emitter.Lifetime = 1.0f / 50.0f;
+			emitter.SphereEmitterData.Timer = 1.0f / 10.0f;
+			emitter.SphereEmitterData.Velocity = 0.5f;
+			emitter.SphereEmitterData.LifeRange = { 1.0f, 1.5f };
+			emitter.SphereEmitterData.Radius = 0.5f;
+			emitter.SphereEmitterData.SizeRange = { 0.25f, 0.5f };
 			particleManager->AddEmitter(emitter);
 
 		}
@@ -532,24 +584,25 @@ void DefaultSceneLayer::_CreateScene()
 
 		
 
-		GameObject::Sptr particles = scene->CreateGameObject("Particles"); 
+		GameObject::Sptr particles = scene->CreateGameObject("Rain"); 
 		{
-			particles->SetPostion({ -2.0f, 0.0f, 2.0f });
+			particles->SetPostion({ -2.0f, 0.0f, 10.0f });
 
 			ParticleSystem::Sptr particleManager = particles->Add<ParticleSystem>();  
-			particleManager->Atlas = particleTex;
+			particleManager->Atlas = particleTex2;
 
 			ParticleSystem::ParticleData emitter;
-			emitter.Type = ParticleType::SphereEmitter;
+			emitter.Type = ParticleType::BoxEmitter;
 			emitter.TexID = 2;
 			emitter.Position = glm::vec3(0.0f);
 			emitter.Color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 			emitter.Lifetime = 0.0f;
-			emitter.SphereEmitterData.Timer = 1.0f / 50.0f;
-			emitter.SphereEmitterData.Velocity = 0.5f;
-			emitter.SphereEmitterData.LifeRange = { 1.0f, 4.0f };
-			emitter.SphereEmitterData.Radius = 1.0f;
-			emitter.SphereEmitterData.SizeRange = { 0.5f, 1.5f };
+
+			emitter.BoxEmitterData.Timer = 1.0f / 50.0f;
+			emitter.BoxEmitterData.Velocity = glm::vec3(0,0,-8);
+			emitter.BoxEmitterData.LifeRange = { 1.0f, 4.0f };
+			emitter.BoxEmitterData.HalfExtents = glm::vec3(0.5);
+			emitter.BoxEmitterData.SizeRange = { 0.5f, 1.5f };
 
 			particleManager->AddEmitter(emitter);
 		}

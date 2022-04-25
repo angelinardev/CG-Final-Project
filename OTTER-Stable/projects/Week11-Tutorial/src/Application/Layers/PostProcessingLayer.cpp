@@ -37,9 +37,11 @@ void PostProcessingLayer::OnAppLoad(const nlohmann::json& config)
 	//_effects.push_back(std::make_shared<BoxFilter3x3>());
 	//_effects.push_back(std::make_shared<BoxFilter5x5>());
 	//_effects.push_back(std::make_shared<OutlineEffect>());
-	//_effects.push_back(std::make_shared<DepthOfField>());
+	_effects.push_back(std::make_shared<DepthOfField>());
 	_effects.push_back(std::make_shared<ToonEffect>());
 	_effects.push_back(std::make_shared<InvertEffect>());
+	_effects.push_back(std::make_shared<SlimeVignette>());
+	_effects.push_back(std::make_shared<NightVision>());
 	
 	//GetEffect<OutlineEffect>()->Enabled = false;
 	GetEffect<InvertEffect>()->Enabled = false;

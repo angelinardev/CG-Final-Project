@@ -20,7 +20,7 @@ public:
 		MAKE_PTRS(Effect);
 
 		// True if this effect is enabled, false if otherwise
-		bool Enabled = true;
+		bool Enabled = false;
 
 		// The name of the effect as seen in the effects window
 		std::string Name;

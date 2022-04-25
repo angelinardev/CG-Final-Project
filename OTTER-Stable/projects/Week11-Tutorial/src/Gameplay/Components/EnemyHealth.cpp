@@ -20,10 +20,10 @@ void EnemyHealth::OnTriggerVolumeEntered(const std::shared_ptr<Gameplay::Physics
 {
 	if (body->GetGameObject()->Name == "Enemy" && !dead) //player has come in contact with the health box
 	{
-		if (GetGameObject()->Get<JumpBehaviour>()->in_air) //player is in air
-		{
-			was_hit = true;
-		}
+		//if (GetGameObject()->Get<JumpBehaviour>()->in_air) //player is in air
+		//{
+		//	was_hit = true;
+		//}
 	}
 }
 

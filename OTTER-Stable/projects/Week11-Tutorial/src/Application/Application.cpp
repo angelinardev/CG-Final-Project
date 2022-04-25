@@ -47,6 +47,7 @@
 #include "Gameplay/Components/ShadowCamera.h"
 #include "Gameplay/Components/ShipMoveBehaviour.h"
 #include "Gameplay/Components/PlayerMovementBehavior.h"
+#include "Gameplay/Components/SeekBehaviour.h"
 
 // GUI
 #include "Gameplay/Components/GUI/RectTransform.h"
@@ -281,6 +282,7 @@ void Application::_RegisterClasses()
 	ComponentManager::RegisterType<ShadowCamera>();
 	ComponentManager::RegisterType<ShipMoveBehaviour>();
 	ComponentManager::RegisterType<PlayerMovementBehavior>();
+	ComponentManager::RegisterType<SeekBehaviour>();
 }
 
 void Application::_Load() {
