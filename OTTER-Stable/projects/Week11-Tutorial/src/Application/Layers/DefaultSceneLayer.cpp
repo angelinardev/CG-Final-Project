@@ -51,6 +51,7 @@
 #include "Gameplay/Components/SimpleCameraControl.h"
 #include "Gameplay/Components/SeekBehaviour.h"
 #include "Gameplay/Components/ProjectileBehaviour.h"
+#include "Gameplay/Components/EnemyHealth.h"
 
 // Physics
 #include "Gameplay/Physics/RigidBody.h"
@@ -528,6 +529,8 @@ void DefaultSceneLayer::_CreateScene()
 			Gameplay::Physics::SphereCollider::Sptr Sphere2 = Gameplay::Physics::SphereCollider::Create();
 			Sphere2->SetRadius(Sphere2->GetRadius() / 2);
 			volume->AddCollider(Sphere2);
+
+			Enemy->Add<EnemyHealth>();
 
 			Enemy->Get<Gameplay::Physics::RigidBody>()->SetAngularFactor(glm::vec3(0.0f, 0.0f, 0.0f));
 			Enemy->Get<Gameplay::Physics::RigidBody>()->SetLinearDamping(0.9f);

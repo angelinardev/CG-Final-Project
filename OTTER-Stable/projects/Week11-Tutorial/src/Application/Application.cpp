@@ -49,6 +49,7 @@
 #include "Gameplay/Components/PlayerMovementBehavior.h"
 #include "Gameplay/Components/SeekBehaviour.h"
 #include "Gameplay/Components/ProjectileBehaviour.h"
+#include "Gameplay/Components/EnemyHealth.h"
 
 // GUI
 #include "Gameplay/Components/GUI/RectTransform.h"
@@ -285,6 +286,7 @@ void Application::_RegisterClasses()
 	ComponentManager::RegisterType<PlayerMovementBehavior>();
 	ComponentManager::RegisterType<SeekBehaviour>();
 	ComponentManager::RegisterType<ProjectileBehaviour>();
+	ComponentManager::RegisterType<EnemyHealth>();
 }
 
 void Application::_Load() {
