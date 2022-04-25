@@ -38,6 +38,15 @@ void PlayerMovementBehavior::OnTriggerVolumeEntered(const std::shared_ptr<Gamepl
 		std::cout << "You lose!\n";
 		std::exit(0);
 	}
+	if (body->GetGameObject()->Name == "ThingProjectile")
+	{
+		//maybe put in key input
+		//destroy thing it comes in contact with
+		Application& app = Application::Get();
+		Gameplay::GameObject::Sptr context = body->GetGameObject()->SelfRef();
+		app.CurrentScene()->RemoveGameObject(context);
+	}
+
 }
 
 void PlayerMovementBehavior::OnTriggerVolumeLeaving(const std::shared_ptr<Gameplay::Physics::RigidBody>& body)

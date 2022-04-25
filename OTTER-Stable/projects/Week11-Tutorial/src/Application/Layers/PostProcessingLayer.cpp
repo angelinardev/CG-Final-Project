@@ -14,6 +14,7 @@
 #include "PostProcessing/InvertEffect.h"
 #include "PostProcessing/PixellationEffect.h"
 #include "PostProcessing/ChromaticAberrationEffect.h"
+#include "PostProcessing/Pixelate.h"
 
 PostProcessingLayer::PostProcessingLayer() :
 	ApplicationLayer()
@@ -46,9 +47,11 @@ void PostProcessingLayer::OnAppLoad(const nlohmann::json& config)
 	_effects.push_back(std::make_shared<ChromaticAberrationEffect>());
 	_effects.push_back(std::make_shared<PixellationEffect>());
 	_effects.push_back(std::make_shared<NightVision>());
+	_effects.push_back(std::make_shared<Pixelate>());
 	
 	//GetEffect<OutlineEffect>()->Enabled = false;
 	GetEffect<InvertEffect>()->Enabled = false;
+	GetEffect<Pixelate>()->Enabled = true;
 
 	Application& app = Application::Get();
 	const glm::uvec4& viewport = app.GetPrimaryViewport();

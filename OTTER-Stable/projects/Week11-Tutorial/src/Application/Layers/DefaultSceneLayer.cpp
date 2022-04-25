@@ -143,6 +143,9 @@ void DefaultSceneLayer::_CreateScene()
 		// Load in the meshes
 		MeshResource::Sptr monkeyMesh = ResourceManager::CreateAsset<MeshResource>("Monkey.obj");
 		MeshResource::Sptr EyeballMesh = ResourceManager::CreateAsset<MeshResource>("Eyeball.obj");
+		//https://free3d.com/3d-model/lego-princess-leia-53876.html
+
+		MeshResource::Sptr playerMesh = ResourceManager::CreateAsset<MeshResource>("models/princess.obj");
 		//MeshResource::Sptr shipMesh   = ResourceManager::CreateAsset<MeshResource>("fenrir.obj");
 
 		// Load in some textures
@@ -203,10 +206,10 @@ void DefaultSceneLayer::_CreateScene()
 		Scene::Sptr scene = std::make_shared<Scene>();  
 
 		// Setting up our enviroment map
-		//scene->SetSkyboxTexture(testCubemap); 
-		//scene->SetSkyboxShader(skyboxShader);
-		//// Since the skybox I used was for Y-up, we need to rotate it 90 deg around the X-axis to convert it to z-up 
-		//scene->SetSkyboxRotation(glm::rotate(MAT4_IDENTITY, glm::half_pi<float>(), glm::vec3(1.0f, 0.0f, 0.0f)));
+		scene->SetSkyboxTexture(testCubemap); 
+		scene->SetSkyboxShader(skyboxShader);
+		// Since the skybox I used was for Y-up, we need to rotate it 90 deg around the X-axis to convert it to z-up 
+		scene->SetSkyboxRotation(glm::rotate(MAT4_IDENTITY, glm::half_pi<float>(), glm::vec3(1.0f, 0.0f, 0.0f)));
 
 		// Loading in a color lookup table
 		Texture3D::Sptr lut = ResourceManager::CreateAsset<Texture3D>("luts/cool.CUBE");   
@@ -237,7 +240,7 @@ void DefaultSceneLayer::_CreateScene()
 		Material::Sptr testMaterial = ResourceManager::CreateAsset<Material>(deferredForward); 
 		{
 			testMaterial->Name = "Box-Specular";
-			testMaterial->Set("u_Material.AlbedoMap", boxTexture); 
+			testMaterial->Set("u_Material.AlbedoMap", solidGreyTex); 
 			testMaterial->Set("u_Material.Specular", boxSpec);
 			testMaterial->Set("u_Material.NormalMap", normalMapDefault);
 		}
@@ -403,7 +406,7 @@ void DefaultSceneLayer::_CreateScene()
 
 		
 		//layout
-		Texture2D::Sptr layoutTex = ResourceManager::CreateAsset<Texture2D>("textures/therealthing.jpg");
+		Texture2D::Sptr layoutTex = ResourceManager::CreateAsset<Texture2D>("textures/therealthing.png");
 		Gameplay::Material::Sptr layoutMaterial = ResourceManager::CreateAsset<Gameplay::Material>(deferredForward);
 		{
 			layoutMaterial->Name = "Layout";
@@ -435,16 +438,13 @@ void DefaultSceneLayer::_CreateScene()
 		// Box to showcase the specular material
 		GameObject::Sptr specBox = scene->CreateGameObject("Player");
 		{
-			MeshResource::Sptr boxMesh = ResourceManager::CreateAsset<MeshResource>();
-			boxMesh->AddParam(MeshBuilderParam::CreateCube(ZERO, ONE));
-			boxMesh->GenerateMesh();
-
 			// Set and rotation position in the scene
 			specBox->SetPostion(glm::vec3(-0.288, 0.1f, 1.01f));
-
+			specBox->SetRotation(glm::vec3(120.0f, 0.0f, 0.0f));
+			specBox->SetScale(glm::vec3(0.7f, 0.7f, 0.7f));
 			// Add a render component
 			RenderComponent::Sptr renderer = specBox->Add<RenderComponent>();
-			renderer->SetMesh(boxMesh);
+			renderer->SetMesh(playerMesh);
 			renderer->SetMaterial(testMaterial); 
 
 			demoBase->AddChild(specBox);
@@ -452,11 +452,15 @@ void DefaultSceneLayer::_CreateScene()
 			Gameplay::Physics::RigidBody::Sptr physics = specBox->Add<Gameplay::Physics::RigidBody>(RigidBodyType::Dynamic);
 			Gameplay::Physics::BoxCollider::Sptr box = Gameplay::Physics::BoxCollider::Create();
 			box->SetExtents(glm::vec3(0.5));
+			box->SetScale(glm::vec3(1.21f, 2.68f, 1.0f));
+			box->SetPosition(glm::vec3(0.0f, 1.08f, -0.7f));
 
 			physics->AddCollider(box);
 			Gameplay::Physics::TriggerVolume::Sptr volume = specBox->Add<Gameplay::Physics::TriggerVolume>();
 			Gameplay::Physics::BoxCollider::Sptr box2 = Gameplay::Physics::BoxCollider::Create();
 			box2->SetExtents(glm::vec3(0.5));
+			box2->SetScale(glm::vec3(1.21f, 2.68f, 1.0f));
+			box2->SetPosition(glm::vec3(0.0f, 1.08f, -0.7f));
 			volume->AddCollider(box2);
 
 			specBox->Get<Gameplay::Physics::RigidBody>()->SetAngularFactor(glm::vec3(0.0f, 0.0f, 0.0f));
