@@ -527,7 +527,7 @@ void DefaultSceneLayer::_CreateScene()
 			physics->AddCollider(Sphere);
 			Gameplay::Physics::TriggerVolume::Sptr volume = Enemy->Add<Gameplay::Physics::TriggerVolume>();
 			Gameplay::Physics::SphereCollider::Sptr Sphere2 = Gameplay::Physics::SphereCollider::Create();
-			Sphere2->SetRadius(Sphere2->GetRadius() / 2);
+			Sphere2->SetRadius(Sphere2->GetRadius());
 			volume->AddCollider(Sphere2);
 
 			Enemy->Add<EnemyHealth>();
@@ -593,15 +593,15 @@ void DefaultSceneLayer::_CreateScene()
 
 			ParticleSystem::ParticleData emitter;
 			emitter.Type = ParticleType::BoxEmitter;
-			emitter.TexID = 2;
+			emitter.TexID = 4;
 			emitter.Position = glm::vec3(0.0f);
 			emitter.Color = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
 			emitter.Lifetime = 0.0f;
 
 			emitter.BoxEmitterData.Timer = 1.0f / 50.0f;
 			emitter.BoxEmitterData.Velocity = glm::vec3(0,0,-8);
-			emitter.BoxEmitterData.LifeRange = { 1.0f, 4.0f };
-			emitter.BoxEmitterData.HalfExtents = glm::vec3(0.5);
+			emitter.BoxEmitterData.LifeRange = { 5.0f, 10.0f };
+			emitter.BoxEmitterData.HalfExtents = glm::vec3(30,25,1);
 			emitter.BoxEmitterData.SizeRange = { 0.5f, 1.5f };
 
 			particleManager->AddEmitter(emitter);

@@ -7,6 +7,16 @@
 #include "Application/Layers/PostProcessingLayer.h"
 #include "Gameplay/InputEngine.h"
 
+#include "Gameplay/Material.h"
+#include "Gameplay/MeshResource.h"
+#include "Utils/ResourceManager/ResourceManager.h"
+#include "Graphics/Textures/Texture2D.h"
+#include "Utils/GlmDefines.h"
+#include "Gameplay/Components/SeekBehaviour.h"
+#include "Gameplay/Components/RenderComponent.h"
+#include "Gameplay/Physics/Colliders/SphereCollider.h"
+
+
 
 //create movetowards function
 //glm::quat MoveTowards(glm::quat current, glm::quat target, float maxDistanceDelta)
@@ -35,17 +45,31 @@ void PlayerMovementBehavior::OnTriggerVolumeEntered(const std::shared_ptr<Gamepl
 {
 	if (body->GetGameObject()->Name == "Enemy") //this trigger has entered to the player
 	{
-		std::cout << "You lose!\n";
-		std::exit(0);
+		LOG_WARN("YOU LOST! You can't touch enemies!");
+		Application::Get().Quit();
 	}
-	if (body->GetGameObject()->Name == "ThingProjectile")
+
+	if (body->GetGameObject()->Name == "ThingProjectile" && InputEngine::IsKeyDown(GLFW_KEY_SPACE))
 	{
+		//isReturned = true;
 		//maybe put in key input
 		//destroy thing it comes in contact with
 		Application& app = Application::Get();
 		Gameplay::GameObject::Sptr context = body->GetGameObject()->SelfRef();
-		app.CurrentScene()->RemoveGameObject(context);
+
+		context->Get<SeekBehaviour>()->seekTo(app.CurrentScene()->FindObjectByName("Enemy"));
 	}
+
+	else if (body->GetGameObject()->Name == "ThingProjectile")
+	{
+		LOG_WARN("YOU LOST! don't get shot 5head");
+		Application::Get().Quit();
+
+		Gameplay::GameObject::Sptr context = body->GetGameObject()->SelfRef();
+		Application::Get().CurrentScene()->RemoveGameObject(context);
+	}
+
+	
 
 }
 
@@ -168,6 +192,12 @@ void PlayerMovementBehavior::Update(float deltaTime) {
 				_impulse = max_speed;
 			}
 		}
+	}
+	
+	if (InputEngine::IsKeyDown(GLFW_KEY_SPACE)) {
+		
+	
+		
 	}
 	
 

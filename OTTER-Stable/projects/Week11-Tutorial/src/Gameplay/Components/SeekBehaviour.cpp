@@ -5,6 +5,7 @@
 #include "Utils/ImGuiHelper.h"
 #include "SeekBehaviour.h"
 #include "Gameplay/Physics/RigidBody.h"
+
 void SeekBehaviour::Awake()
 {
     _body = GetComponent<Gameplay::Physics::RigidBody>();
@@ -25,7 +26,8 @@ nlohmann::json SeekBehaviour::ToJson() const {
 SeekBehaviour::SeekBehaviour() :
     IComponent()
 
-{ }
+{
+}
 
 SeekBehaviour::~SeekBehaviour() = default;
 
@@ -35,6 +37,7 @@ SeekBehaviour::Sptr SeekBehaviour::FromJson(const nlohmann::json & blob) {
 }
 
 void SeekBehaviour::seekTo(Gameplay::GameObject::Sptr& object) {
+    seekTarget = object;
     _target = object->GetPosition();
     _isSeeking = true;
 }
@@ -42,10 +45,14 @@ void SeekBehaviour::seekTo(Gameplay::GameObject::Sptr& object) {
 void SeekBehaviour::Update(float deltaTime)
 {
     _body = GetComponent<Gameplay::Physics::RigidBody>();
-    _target = GetGameObject()->GetScene()->FindObjectByName("Player")->GetPosition();
-
-    if (_isSeeking) {
-        LOG_INFO("Seeking...");
+    if (seekTarget == nullptr) {
+        _target = GetGameObject()->GetScene()->FindObjectByName("Player")->GetPosition();
+    }
+    else {
+        _target = seekTarget->GetPosition();
+    }
+    if (_isSeeking && seekTarget != nullptr) {
+        _target = seekTarget->GetPosition();
 
         glm::vec3 difference = _target - (_body->GetGameObject()->GetPosition() - glm::vec3(0.0f, 0.0f, 1.5f));
         //if 

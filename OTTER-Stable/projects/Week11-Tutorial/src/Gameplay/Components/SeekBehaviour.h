@@ -27,6 +27,7 @@ public:
 	
 	void seekTo(Gameplay::GameObject::Sptr& object);
 protected:
+	Gameplay::GameObject::Sptr seekTarget;
 	bool _isSeeking = false;
 	glm::vec3 _target;
 };

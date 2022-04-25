@@ -5,6 +5,7 @@
 #include "Utils/ImGuiHelper.h"
 #include "Application/Application.h"
 #include "JumpBehaviour.h"
+#include "PlayerMovementBehavior.h"
 
 void EnemyHealth::Awake()
 {
@@ -18,14 +19,14 @@ void EnemyHealth::Awake()
 
 void EnemyHealth::OnTriggerVolumeEntered(const std::shared_ptr<Gameplay::Physics::RigidBody>& body)
 {
-	if (body->GetGameObject()->Name == "ThingProjectile") //projectile was shot back
-	{
-		std::cout << "\nYou won!!\n";
-		Application& app = Application::Get();
-		//delete itself
-		Gameplay::GameObject::Sptr context = GetGameObject()->SelfRef();
-		app.CurrentScene()->RemoveGameObject(context);
-	}
+	//if (body->GetGameObject()->Name == "ThingProjectile") //projectile was shot back
+	//{
+	//	std::cout << "\nYou won!!\n";
+	//	Application& app = Application::Get();
+	//	//delete itself
+	//	Gameplay::GameObject::Sptr context = GetGameObject()->SelfRef();
+	//	app.CurrentScene()->RemoveGameObject(app.CurrentScene()->FindObjectByName("Enemy"));
+	//}
 }
 
 void EnemyHealth::OnTriggerVolumeLeaving(const std::shared_ptr<Gameplay::Physics::RigidBody>& body)

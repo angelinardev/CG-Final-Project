@@ -23,6 +23,8 @@ public:
 	virtual void Awake() override;
 	virtual void Update(float deltaTime) override;
 
+	
+
 public:
 	virtual void RenderImGui() override;
 	MAKE_TYPENAME(PlayerMovementBehavior);
@@ -32,6 +34,7 @@ public:
 	void SetSpill(bool state);
 	bool is_moving = false;
 	bool is_running = false;
+	//static bool isReturned;
 
 protected:
 
