@@ -574,7 +574,8 @@ void DefaultSceneLayer::_CreateScene()
 
 			shadowCam->SetProjection(glm::perspective(glm::radians(120.0f), 1.0f, 0.1f, 100.0f));
 			shadowCam->Intensity = 7.62f;
-			shadowCam->Bias *= 7;
+			shadowCam->Bias *= 7.0f;
+			shadowCam->NormalBias *= 7.0f;
 			Enemy->AddChild(shadowCaster);
 		}
 

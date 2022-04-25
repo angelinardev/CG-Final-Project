@@ -23,5 +23,5 @@ public:
 protected:
 	ShaderProgram::Sptr _shader;
 
-	int strength = 200;
+	int strength = 210;
 };
