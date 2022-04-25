@@ -454,6 +454,10 @@ void DefaultSceneLayer::_CreateScene()
 			box->SetExtents(glm::vec3(0.5));
 
 			physics->AddCollider(box);
+			Gameplay::Physics::TriggerVolume::Sptr volume = specBox->Add<Gameplay::Physics::TriggerVolume>();
+			Gameplay::Physics::BoxCollider::Sptr box2 = Gameplay::Physics::BoxCollider::Create();
+			box2->SetExtents(glm::vec3(0.5));
+			volume->AddCollider(box2);
 
 			specBox->Get<Gameplay::Physics::RigidBody>()->SetAngularFactor(glm::vec3(0.0f, 0.0f, 0.0f));
 			specBox->Get<Gameplay::Physics::RigidBody>()->SetLinearDamping(0.9f);
@@ -508,6 +512,10 @@ void DefaultSceneLayer::_CreateScene()
 			Sphere->SetRadius(Sphere->GetRadius() / 2);
 
 			physics->AddCollider(Sphere);
+			Gameplay::Physics::TriggerVolume::Sptr volume = Enemy->Add<Gameplay::Physics::TriggerVolume>();
+			Gameplay::Physics::SphereCollider::Sptr Sphere2 = Gameplay::Physics::SphereCollider::Create();
+			Sphere2->SetRadius(Sphere2->GetRadius() / 2);
+			volume->AddCollider(Sphere2);
 
 			Enemy->Get<Gameplay::Physics::RigidBody>()->SetAngularFactor(glm::vec3(0.0f, 0.0f, 0.0f));
 			Enemy->Get<Gameplay::Physics::RigidBody>()->SetLinearDamping(0.9f);

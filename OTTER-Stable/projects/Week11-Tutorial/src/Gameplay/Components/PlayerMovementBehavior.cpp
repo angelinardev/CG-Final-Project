@@ -31,7 +31,19 @@
 //	}
 //	return current + glm::sign(target - current) * maxDelta;
 //}
+void PlayerMovementBehavior::OnTriggerVolumeEntered(const std::shared_ptr<Gameplay::Physics::RigidBody>& body)
+{
+	if (body->GetGameObject()->Name == "Enemy") //this trigger has entered to the player
+	{
+		std::cout << "You lose!\n";
+		std::exit(0);
+	}
+}
 
+void PlayerMovementBehavior::OnTriggerVolumeLeaving(const std::shared_ptr<Gameplay::Physics::RigidBody>& body)
+{
+	
+}
 void PlayerMovementBehavior::Awake()
 {
 	_body = GetComponent<Gameplay::Physics::RigidBody>(); //Gets the Physics Body that it's attached to

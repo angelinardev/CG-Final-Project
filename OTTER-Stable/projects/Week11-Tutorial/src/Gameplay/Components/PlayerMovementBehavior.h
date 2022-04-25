@@ -16,6 +16,10 @@ public:
 	PlayerMovementBehavior();
 	virtual ~PlayerMovementBehavior();
 
+	void OnTriggerVolumeEntered(const std::shared_ptr<Gameplay::Physics::RigidBody>& body) override;
+
+	void OnTriggerVolumeLeaving(const std::shared_ptr<Gameplay::Physics::RigidBody>& body) override;
+
 	virtual void Awake() override;
 	virtual void Update(float deltaTime) override;
 
